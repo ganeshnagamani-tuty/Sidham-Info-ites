@@ -1,0 +1,753 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TechFix Repair Center – Thoothukudi</title>
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=DM+Sans:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f1eb;
+    --surface: #ffffff;
+    --surface2: #f9f7f3;
+    --border: #e0dbd0;
+    --accent: #1a4fa0;
+    --accent2: #e85d26;
+    --text: #1c1c1c;
+    --text2: #5a5550;
+    --text3: #9a9590;
+    --success: #1a7a45;
+    --warning: #b85c00;
+    --danger: #b82020;
+    --info: #1a4fa0;
+    --radius: 8px;
+    --radius-lg: 14px;
+    --font-head: 'Rajdhani', sans-serif;
+    --font-body: 'DM Sans', sans-serif;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: var(--font-body); background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; }
+
+  /* HEADER */
+  .header { background: var(--accent); color: #fff; padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; }
+  .header-brand { display: flex; align-items: center; gap: 12px; }
+  .header-logo { width: 40px; height: 40px; background: var(--accent2); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-family: var(--font-head); font-size: 18px; font-weight: 700; color: #fff; }
+  .header-title { font-family: var(--font-head); font-size: 22px; font-weight: 700; letter-spacing: 0.5px; }
+  .header-sub { font-size: 12px; opacity: 0.75; margin-top: 1px; }
+  .header-date { font-size: 12px; opacity: 0.7; text-align: right; }
+
+  /* TABS */
+  .tabs { background: var(--surface); border-bottom: 1.5px solid var(--border); display: flex; gap: 0; padding: 0 24px; }
+  .tab { padding: 13px 20px; font-family: var(--font-head); font-size: 15px; font-weight: 600; letter-spacing: 0.3px; color: var(--text2); cursor: pointer; border-bottom: 3px solid transparent; margin-bottom: -1.5px; transition: all 0.15s; }
+  .tab:hover { color: var(--accent); }
+  .tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* LAYOUT */
+  .main { padding: 24px; max-width: 1200px; margin: 0 auto; }
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* CARDS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px; margin-bottom: 20px; }
+  .card-title { font-family: var(--font-head); font-size: 17px; font-weight: 700; color: var(--accent); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; border-bottom: 1px solid var(--border); padding-bottom: 12px; }
+
+  /* FORM */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .form-grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+  .form-group { display: flex; flex-direction: column; gap: 5px; }
+  .form-group label { font-size: 12px; font-weight: 500; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; }
+  .form-group input, .form-group select, .form-group textarea {
+    border: 1px solid var(--border); border-radius: var(--radius); padding: 9px 12px;
+    font-family: var(--font-body); font-size: 14px; background: var(--surface2);
+    color: var(--text); transition: border 0.15s;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus {
+    outline: none; border-color: var(--accent); background: #fff;
+  }
+  .form-group textarea { resize: vertical; min-height: 70px; }
+  .form-full { grid-column: 1 / -1; }
+
+  /* BUTTONS */
+  .btn { padding: 10px 20px; border-radius: var(--radius); border: none; cursor: pointer; font-family: var(--font-head); font-size: 15px; font-weight: 600; letter-spacing: 0.3px; transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px; }
+  .btn-primary { background: var(--accent); color: #fff; }
+  .btn-primary:hover { background: #163f85; }
+  .btn-danger { background: var(--danger); color: #fff; }
+  .btn-danger:hover { background: #921818; }
+  .btn-success { background: var(--success); color: #fff; }
+  .btn-success:hover { background: #155a35; }
+  .btn-warning { background: var(--warning); color: #fff; }
+  .btn-warning:hover { background: #944900; }
+  .btn-outline { background: transparent; border: 1.5px solid var(--border); color: var(--text2); }
+  .btn-outline:hover { border-color: var(--accent); color: var(--accent); }
+  .btn-sm { padding: 6px 12px; font-size: 13px; }
+  .btn-wa { background: #25d366; color: #fff; }
+  .btn-wa:hover { background: #1da84f; }
+
+  /* STATUS BADGES */
+  .badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 500; white-space: nowrap; }
+  .badge-pending { background: #fff3e0; color: #b85c00; border: 1px solid #f0c070; }
+  .badge-inprogress { background: #e3f0ff; color: #1a4fa0; border: 1px solid #99c0f0; }
+  .badge-outsourced { background: #f3e3ff; color: #6a1ab0; border: 1px solid #c099e0; }
+  .badge-ready { background: #e0f7ea; color: #1a7a45; border: 1px solid #80d4a0; }
+  .badge-delivered { background: #f0f0f0; color: #555; border: 1px solid #ccc; }
+  .badge-unrepairable { background: #ffecec; color: #b82020; border: 1px solid #f0a0a0; }
+
+  /* JOBS TABLE */
+  .table-wrap { overflow-x: auto; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--surface2); font-family: var(--font-head); font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; padding: 10px 12px; text-align: left; border-bottom: 1.5px solid var(--border); }
+  td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text); vertical-align: middle; }
+  tr:hover td { background: #faf9f6; }
+  .job-id { font-family: var(--font-head); font-weight: 600; color: var(--accent); }
+
+  /* STATS */
+  .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
+  .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 16px 18px; }
+  .stat-label { font-size: 12px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.4px; font-weight: 500; margin-bottom: 6px; }
+  .stat-value { font-family: var(--font-head); font-size: 26px; font-weight: 700; }
+  .stat-value.blue { color: var(--accent); }
+  .stat-value.orange { color: var(--accent2); }
+  .stat-value.green { color: var(--success); }
+  .stat-value.red { color: var(--danger); }
+
+  /* MODAL */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.45); z-index: 100; display: none; align-items: center; justify-content: center; }
+  .modal-overlay.open { display: flex; }
+  .modal { background: var(--surface); border-radius: var(--radius-lg); padding: 28px; width: 600px; max-width: 95vw; max-height: 90vh; overflow-y: auto; position: relative; }
+  .modal-title { font-family: var(--font-head); font-size: 19px; font-weight: 700; color: var(--accent); margin-bottom: 18px; padding-bottom: 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-close { background: none; border: none; font-size: 22px; cursor: pointer; color: var(--text2); line-height: 1; }
+
+  /* RECEIPT PRINT */
+  @media print {
+    body * { visibility: hidden !important; }
+    #print-area, #print-area * { visibility: visible !important; }
+    #print-area { position: fixed; top: 0; left: 0; width: 100%; }
+  }
+  .receipt-a4 { display: none; }
+  .receipt-half {
+    width: 100%;
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+  .receipt-header { text-align: center; margin-bottom: 12px; border-bottom: 1.5px solid #333; padding-bottom: 10px; }
+  .receipt-shop-name { font-family: var(--font-head); font-size: 20px; font-weight: 700; }
+  .receipt-shop-sub { font-size: 11px; color: #555; margin-top: 2px; }
+  .receipt-row { display: flex; justify-content: space-between; margin: 3px 0; }
+  .receipt-row .lbl { color: #555; min-width: 110px; }
+  .receipt-row .val { font-weight: 500; text-align: right; flex: 1; }
+  .receipt-section-title { font-family: var(--font-head); font-size: 13px; font-weight: 700; border-bottom: 1px solid #ccc; padding-bottom: 4px; margin: 10px 0 6px; text-transform: uppercase; letter-spacing: 0.3px; }
+  .receipt-footer { text-align: center; margin-top: 10px; font-size: 11px; color: #777; border-top: 1px dashed #ccc; padding-top: 8px; }
+  .receipt-copy-label { text-align: right; font-size: 10px; font-weight: 600; text-transform: uppercase; color: #999; margin-bottom: 6px; letter-spacing: 1px; }
+
+  /* SEARCH/FILTER BAR */
+  .toolbar { display: flex; gap: 10px; margin-bottom: 16px; align-items: center; flex-wrap: wrap; }
+  .toolbar input, .toolbar select { padding: 8px 12px; border: 1px solid var(--border); border-radius: var(--radius); font-family: var(--font-body); font-size: 13px; background: var(--surface); color: var(--text); }
+  .toolbar input { flex: 1; min-width: 160px; }
+  .toolbar input:focus, .toolbar select:focus { outline: none; border-color: var(--accent); }
+
+  /* WA Modal */
+  .wa-preview { background: #e9feea; border: 1px solid #90d4a0; border-radius: var(--radius); padding: 14px 16px; font-size: 13.5px; line-height: 1.6; white-space: pre-wrap; margin: 12px 0; min-height: 80px; }
+  textarea.wa-edit { width: 100%; border: 1px solid var(--border); border-radius: var(--radius); padding: 10px 12px; font-family: var(--font-body); font-size: 13.5px; line-height: 1.6; background: var(--surface2); color: var(--text); resize: vertical; min-height: 160px; }
+
+  .action-btns { display: flex; gap: 6px; flex-wrap: wrap; }
+  .section-desc { font-size: 13px; color: var(--text2); margin-bottom: 16px; line-height: 1.6; }
+
+  @media (max-width: 700px) {
+    .form-grid, .form-grid-3 { grid-template-columns: 1fr; }
+    .stats-grid { grid-template-columns: 1fr 1fr; }
+    .main { padding: 14px; }
+    .tabs { padding: 0 10px; overflow-x: auto; }
+    .tab { padding: 12px 14px; font-size: 14px; white-space: nowrap; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="header-brand">
+    <div class="header-logo">TF</div>
+    <div>
+      <div class="header-title">TechFix Repair Center</div>
+      <div class="header-sub">Thoothukudi, Tamil Nadu</div>
+    </div>
+  </div>
+  <div class="header-date" id="hdr-date"></div>
+</div>
+
+<div class="tabs">
+  <div class="tab active" onclick="showTab('dashboard')">📊 Dashboard</div>
+  <div class="tab" onclick="showTab('new-job')">➕ New Job</div>
+  <div class="tab" onclick="showTab('jobs')">🔧 All Jobs</div>
+  <div class="tab" onclick="showTab('settings')">⚙ Settings</div>
+</div>
+
+<div class="main">
+
+  <!-- DASHBOARD -->
+  <div class="page active" id="page-dashboard">
+    <div class="stats-grid" id="stats-grid"></div>
+    <div class="card">
+      <div class="card-title">📋 Recent Jobs</div>
+      <div class="table-wrap">
+        <table id="recent-table">
+          <thead><tr><th>Job ID</th><th>Client</th><th>Product</th><th>Status</th><th>Est. Amount</th><th>Date</th><th>Action</th></tr></thead>
+          <tbody id="recent-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- NEW JOB -->
+  <div class="page" id="page-new-job">
+    <div class="card">
+      <div class="card-title">🧾 New Repair Job Entry</div>
+      <p class="section-desc">Fill in all details carefully. A receipt will be generated automatically after saving.</p>
+
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Client Name *</label>
+          <input type="text" id="f-name" placeholder="e.g. Rajkumar M">
+        </div>
+        <div class="form-group">
+          <label>Mobile Number *</label>
+          <input type="tel" id="f-phone" placeholder="e.g. 9876543210">
+        </div>
+        <div class="form-group">
+          <label>Product Type *</label>
+          <select id="f-product">
+            <option value="">-- Select --</option>
+            <option>Desktop PC</option>
+            <option>Laptop</option>
+            <option>Printer</option>
+            <option>AIO PC</option>
+            <option>UPS</option>
+            <option>Monitor</option>
+            <option>Scanner</option>
+            <option>Keyboard / Mouse</option>
+            <option>Hard Disk / SSD</option>
+            <option>Router / Modem</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Brand / Model</label>
+          <input type="text" id="f-brand" placeholder="e.g. HP, Dell, Epson L360">
+        </div>
+        <div class="form-group">
+          <label>Serial No. / IMEI</label>
+          <input type="text" id="f-serial" placeholder="Optional">
+        </div>
+        <div class="form-group">
+          <label>Condition on Arrival</label>
+          <select id="f-condition">
+            <option>Good – only functional issue</option>
+            <option>Minor physical damage</option>
+            <option>Major physical damage</option>
+            <option>Dead / Not powering on</option>
+          </select>
+        </div>
+        <div class="form-group form-full">
+          <label>Problem Description *</label>
+          <textarea id="f-problem" placeholder="Describe the issue reported by client…"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Assigned To</label>
+          <select id="f-assigned">
+            <option value="Self">Self (In-house)</option>
+            <option value="Outsource">Outsource</option>
+          </select>
+        </div>
+        <div class="form-group" id="fg-outsource" style="display:none;">
+          <label>Outsource Partner Name</label>
+          <input type="text" id="f-outsource" placeholder="e.g. Sri Tech Service, Chennai">
+        </div>
+        <div class="form-group">
+          <label>Estimated Amount (₹)</label>
+          <input type="number" id="f-amount" placeholder="0" min="0">
+        </div>
+        <div class="form-group">
+          <label>Advance Paid (₹)</label>
+          <input type="number" id="f-advance" placeholder="0" min="0" value="0">
+        </div>
+        <div class="form-group">
+          <label>Status</label>
+          <select id="f-status">
+            <option value="Pending">Pending – Under Inspection</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Outsourced">Outsourced</option>
+            <option value="Ready">Ready for Pickup</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Expected Delivery Date</label>
+          <input type="date" id="f-delivery">
+        </div>
+        <div class="form-group form-full">
+          <label>Accessories / Items Received</label>
+          <input type="text" id="f-accessories" placeholder="e.g. Power adapter, Battery, Bag">
+        </div>
+        <div class="form-group form-full">
+          <label>Internal Notes (not on receipt)</label>
+          <textarea id="f-notes" placeholder="Any internal remarks…" style="min-height:50px;"></textarea>
+        </div>
+      </div>
+
+      <div style="display:flex; gap:10px; margin-top:20px; flex-wrap:wrap;">
+        <button class="btn btn-primary" onclick="saveJob()">💾 Save & Generate Receipt</button>
+        <button class="btn btn-outline" onclick="clearForm()">✖ Clear Form</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- JOBS LIST -->
+  <div class="page" id="page-jobs">
+    <div class="card">
+      <div class="card-title">🔧 All Repair Jobs</div>
+      <div class="toolbar">
+        <input type="text" id="search-input" placeholder="Search by name, Job ID, product…" oninput="renderJobs()">
+        <select id="filter-status" onchange="renderJobs()">
+          <option value="">All Status</option>
+          <option>Pending</option>
+          <option>In Progress</option>
+          <option>Outsourced</option>
+          <option>Ready</option>
+          <option>Delivered</option>
+          <option>Unrepairable</option>
+        </select>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead><tr><th>Job ID</th><th>Client</th><th>Mobile</th><th>Product</th><th>Assigned</th><th>Status</th><th>Amt ₹</th><th>Date</th><th>Actions</th></tr></thead>
+          <tbody id="jobs-body"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SETTINGS -->
+  <div class="page" id="page-settings">
+    <div class="card">
+      <div class="card-title">🏪 Shop Details (for Receipt)</div>
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Shop Name</label>
+          <input type="text" id="s-shopname" placeholder="e.g. TechFix Repair Center">
+        </div>
+        <div class="form-group">
+          <label>Owner Name</label>
+          <input type="text" id="s-owner" placeholder="e.g. K. Murugan">
+        </div>
+        <div class="form-group form-full">
+          <label>Address</label>
+          <textarea id="s-address" style="min-height:55px;" placeholder="Door No., Street, Area, Thoothukudi – 628 001"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Phone / Mobile</label>
+          <input type="text" id="s-phone" placeholder="e.g. 9876543210">
+        </div>
+        <div class="form-group">
+          <label>GST Number (Optional)</label>
+          <input type="text" id="s-gst" placeholder="e.g. 33AAAAA0000A1Z5">
+        </div>
+        <div class="form-group form-full">
+          <label>Receipt Footer Text</label>
+          <input type="text" id="s-footer" placeholder="e.g. Thank you! Warranty: 30 days on repaired parts.">
+        </div>
+      </div>
+      <div style="margin-top:16px; display:flex; gap:10px;">
+        <button class="btn btn-primary" onclick="saveSettings()">💾 Save Settings</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- EDIT JOB MODAL -->
+<div class="modal-overlay" id="modal-edit">
+  <div class="modal">
+    <div class="modal-title">Edit Job <button class="modal-close" onclick="closeModal('modal-edit')">✕</button></div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>Client Name</label>
+        <input type="text" id="e-name">
+      </div>
+      <div class="form-group">
+        <label>Mobile</label>
+        <input type="tel" id="e-phone">
+      </div>
+      <div class="form-group">
+        <label>Product</label>
+        <input type="text" id="e-product">
+      </div>
+      <div class="form-group">
+        <label>Brand / Model</label>
+        <input type="text" id="e-brand">
+      </div>
+      <div class="form-group form-full">
+        <label>Problem</label>
+        <textarea id="e-problem"></textarea>
+      </div>
+      <div class="form-group">
+        <label>Assigned To</label>
+        <select id="e-assigned">
+          <option value="Self">Self (In-house)</option>
+          <option value="Outsource">Outsource</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Outsource Partner</label>
+        <input type="text" id="e-outsource" placeholder="If outsourced">
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <select id="e-status">
+          <option value="Pending">Pending</option>
+          <option value="In Progress">In Progress</option>
+          <option value="Outsourced">Outsourced</option>
+          <option value="Ready">Ready for Pickup</option>
+          <option value="Delivered">Delivered</option>
+          <option value="Unrepairable">Unrepairable</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Estimated Amount (₹)</label>
+        <input type="number" id="e-amount" min="0">
+      </div>
+      <div class="form-group">
+        <label>Advance Paid (₹)</label>
+        <input type="number" id="e-advance" min="0">
+      </div>
+      <div class="form-group">
+        <label>Expected Delivery</label>
+        <input type="date" id="e-delivery">
+      </div>
+      <div class="form-group">
+        <label>Accessories</label>
+        <input type="text" id="e-accessories">
+      </div>
+      <div class="form-group form-full">
+        <label>Internal Notes</label>
+        <textarea id="e-notes" style="min-height:50px;"></textarea>
+      </div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="updateJob()">💾 Update Job</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-edit')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- WHATSAPP MODAL -->
+<div class="modal-overlay" id="modal-wa">
+  <div class="modal">
+    <div class="modal-title">📱 Send WhatsApp Status <button class="modal-close" onclick="closeModal('modal-wa')">✕</button></div>
+    <p style="font-size:13px; color:var(--text2); margin-bottom:10px;">Edit the message below before sending. It will open WhatsApp Web with this text pre-filled.</p>
+    <textarea class="wa-edit" id="wa-text"></textarea>
+    <div style="display:flex; gap:10px; margin-top:12px; flex-wrap:wrap;">
+      <button class="btn btn-wa" onclick="sendWhatsApp()">📲 Open in WhatsApp</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-wa')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- RECEIPT MODAL -->
+<div class="modal-overlay" id="modal-receipt">
+  <div class="modal" style="width:700px; max-width:98vw;">
+    <div class="modal-title">🖨 Receipt Preview (A4 → 2 × A5) <button class="modal-close" onclick="closeModal('modal-receipt')">✕</button></div>
+    <p style="font-size:13px; color:var(--text2); margin-bottom:14px;">Two copies side-by-side on one A4 sheet. Print using <b>Landscape</b> for best results, or <b>Portrait</b> for standard.</p>
+    <div id="print-area">
+      <div id="receipt-content" style="display:grid; grid-template-columns:1fr 1fr; gap:16px;"></div>
+    </div>
+    <div style="display:flex; gap:10px; margin-top:16px; flex-wrap:wrap;">
+      <button class="btn btn-primary" onclick="window.print()">🖨 Print Receipt</button>
+      <button class="btn btn-outline" onclick="closeModal('modal-receipt')">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let jobs = JSON.parse(localStorage.getItem('techfix_jobs') || '[]');
+let settings = JSON.parse(localStorage.getItem('techfix_settings') || '{}');
+let editingId = null;
+let waPhone = '';
+
+function saveData() { localStorage.setItem('techfix_jobs', JSON.stringify(jobs)); }
+
+function genId() {
+  const n = (jobs.length + 1).toString().padStart(4, '0');
+  const yr = new Date().getFullYear().toString().slice(-2);
+  return 'TF' + yr + n;
+}
+
+function today() { return new Date().toLocaleDateString('en-IN', {day:'2-digit',month:'2-digit',year:'numeric'}); }
+function todayISO() { return new Date().toISOString().split('T')[0]; }
+
+document.getElementById('hdr-date').innerHTML = new Date().toLocaleDateString('en-IN',{weekday:'short',day:'2-digit',month:'short',year:'numeric'}) + '<br>' + new Date().toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
+
+document.getElementById('f-assigned').addEventListener('change', function() {
+  document.getElementById('fg-outsource').style.display = this.value === 'Outsource' ? '' : 'none';
+});
+
+function showTab(tab) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-' + tab).classList.add('active');
+  event.target.classList.add('active');
+  if (tab === 'dashboard') renderDashboard();
+  if (tab === 'jobs') renderJobs();
+  if (tab === 'settings') loadSettings();
+}
+
+function saveJob() {
+  const name = document.getElementById('f-name').value.trim();
+  const phone = document.getElementById('f-phone').value.trim();
+  const product = document.getElementById('f-product').value;
+  const problem = document.getElementById('f-problem').value.trim();
+  if (!name || !phone || !product || !problem) { alert('Please fill Name, Mobile, Product, and Problem.'); return; }
+
+  const job = {
+    id: genId(), date: todayISO(), dateDisplay: today(),
+    name, phone,
+    product, brand: document.getElementById('f-brand').value.trim(),
+    serial: document.getElementById('f-serial').value.trim(),
+    condition: document.getElementById('f-condition').value,
+    problem,
+    assigned: document.getElementById('f-assigned').value,
+    outsource: document.getElementById('f-outsource').value.trim(),
+    amount: parseFloat(document.getElementById('f-amount').value) || 0,
+    advance: parseFloat(document.getElementById('f-advance').value) || 0,
+    status: document.getElementById('f-status').value,
+    delivery: document.getElementById('f-delivery').value,
+    accessories: document.getElementById('f-accessories').value.trim(),
+    notes: document.getElementById('f-notes').value.trim(),
+  };
+  jobs.unshift(job);
+  saveData();
+  clearForm();
+  showReceipt(job);
+  alert('✅ Job saved successfully! Job ID: ' + job.id);
+}
+
+function clearForm() {
+  ['f-name','f-phone','f-brand','f-serial','f-problem','f-outsource','f-accessories','f-notes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('f-product').value = '';
+  document.getElementById('f-amount').value = '';
+  document.getElementById('f-advance').value = '0';
+  document.getElementById('f-assigned').value = 'Self';
+  document.getElementById('f-status').value = 'Pending';
+  document.getElementById('f-delivery').value = '';
+  document.getElementById('fg-outsource').style.display = 'none';
+  document.getElementById('f-condition').value = 'Good – only functional issue';
+}
+
+function statusBadge(s) {
+  const map = {
+    'Pending':'badge-pending','In Progress':'badge-inprogress','Outsourced':'badge-outsourced',
+    'Ready':'badge-ready','Delivered':'badge-delivered','Unrepairable':'badge-unrepairable'
+  };
+  return `<span class="badge ${map[s]||'badge-pending'}">${s}</span>`;
+}
+
+function renderDashboard() {
+  const total = jobs.length;
+  const pending = jobs.filter(j=>j.status==='Pending'||j.status==='In Progress'||j.status==='Outsourced').length;
+  const ready = jobs.filter(j=>j.status==='Ready').length;
+  const revenue = jobs.filter(j=>j.status==='Delivered').reduce((s,j)=>s+(j.amount||0),0);
+  document.getElementById('stats-grid').innerHTML = `
+    <div class="stat-card"><div class="stat-label">Total Jobs</div><div class="stat-value blue">${total}</div></div>
+    <div class="stat-card"><div class="stat-label">Active</div><div class="stat-value orange">${pending}</div></div>
+    <div class="stat-card"><div class="stat-label">Ready Pickup</div><div class="stat-value green">${ready}</div></div>
+    <div class="stat-card"><div class="stat-label">Revenue (Delivered)</div><div class="stat-value blue">₹${revenue.toLocaleString()}</div></div>
+  `;
+  const recent = jobs.slice(0,10);
+  document.getElementById('recent-body').innerHTML = recent.map(j => `
+    <tr>
+      <td class="job-id">${j.id}</td>
+      <td>${j.name}</td>
+      <td>${j.product}${j.brand?' – '+j.brand:''}</td>
+      <td>${statusBadge(j.status)}</td>
+      <td>₹${(j.amount||0).toLocaleString()}</td>
+      <td>${j.dateDisplay}</td>
+      <td><div class="action-btns">
+        <button class="btn btn-outline btn-sm" onclick="openReceipt('${j.id}')">🖨</button>
+        <button class="btn btn-wa btn-sm" onclick="openWA('${j.id}')">📲</button>
+      </div></td>
+    </tr>
+  `).join('');
+}
+
+function renderJobs() {
+  const q = (document.getElementById('search-input').value||'').toLowerCase();
+  const sf = document.getElementById('filter-status').value;
+  let list = jobs;
+  if (q) list = list.filter(j => (j.id+j.name+j.phone+j.product+j.brand).toLowerCase().includes(q));
+  if (sf) list = list.filter(j => j.status === sf);
+  document.getElementById('jobs-body').innerHTML = list.map(j => `
+    <tr>
+      <td class="job-id">${j.id}</td>
+      <td>${j.name}</td>
+      <td>${j.phone}</td>
+      <td>${j.product}${j.brand?' <span style="color:var(--text3);font-size:12px;">'+j.brand+'</span>':''}</td>
+      <td style="font-size:12px;">${j.assigned==='Outsource'?'🔗 '+j.outsource:'👤 Self'}</td>
+      <td>${statusBadge(j.status)}</td>
+      <td>₹${(j.amount||0).toLocaleString()}</td>
+      <td style="font-size:12px;">${j.dateDisplay}</td>
+      <td><div class="action-btns">
+        <button class="btn btn-outline btn-sm" onclick="openEdit('${j.id}')" title="Edit">✏️</button>
+        <button class="btn btn-outline btn-sm" onclick="openReceipt('${j.id}')" title="Receipt">🖨</button>
+        <button class="btn btn-wa btn-sm" onclick="openWA('${j.id}')" title="WhatsApp">📲</button>
+        <button class="btn btn-danger btn-sm" onclick="deleteJob('${j.id}')" title="Delete">🗑</button>
+      </div></td>
+    </tr>
+  `).join('') || '<tr><td colspan="9" style="text-align:center;color:var(--text3);padding:30px;">No jobs found.</td></tr>';
+}
+
+function deleteJob(id) {
+  if (!confirm('Delete this job permanently?')) return;
+  jobs = jobs.filter(j=>j.id!==id);
+  saveData(); renderJobs(); renderDashboard();
+}
+
+function openEdit(id) {
+  const j = jobs.find(j=>j.id===id); if(!j) return;
+  editingId = id;
+  ['name','phone','brand','problem','outsource','accessories','notes'].forEach(f => document.getElementById('e-'+f).value = j[f]||'');
+  document.getElementById('e-product').value = j.product||'';
+  document.getElementById('e-assigned').value = j.assigned||'Self';
+  document.getElementById('e-status').value = j.status||'Pending';
+  document.getElementById('e-amount').value = j.amount||0;
+  document.getElementById('e-advance').value = j.advance||0;
+  document.getElementById('e-delivery').value = j.delivery||'';
+  openModal('modal-edit');
+}
+
+function updateJob() {
+  const j = jobs.find(j=>j.id===editingId); if(!j) return;
+  ['name','phone','brand','problem','outsource','accessories','notes'].forEach(f => j[f] = document.getElementById('e-'+f).value.trim());
+  j.product = document.getElementById('e-product').value.trim();
+  j.assigned = document.getElementById('e-assigned').value;
+  j.status = document.getElementById('e-status').value;
+  j.amount = parseFloat(document.getElementById('e-amount').value)||0;
+  j.advance = parseFloat(document.getElementById('e-advance').value)||0;
+  j.delivery = document.getElementById('e-delivery').value;
+  saveData(); closeModal('modal-edit');
+  renderJobs(); renderDashboard();
+  alert('✅ Job updated!');
+}
+
+function openWA(id) {
+  const j = jobs.find(j=>j.id===id); if(!j) return;
+  waPhone = j.phone;
+  const sh = settings.shopname||'TechFix Repair Center';
+  const ph = settings.phone||'';
+  const balance = (j.amount||0)-(j.advance||0);
+  const delivMsg = j.delivery ? `📅 Expected Delivery: ${j.delivery}` : '';
+  const msg = `Dear ${j.name},
+
+This is an update from *${sh}*, Thoothukudi.
+
+🔖 Job ID: *${j.id}*
+💻 Product: ${j.product}${j.brand?' ('+j.brand+')':''}
+📌 Status: *${j.status}*
+${delivMsg}
+💰 Estimated Amount: ₹${(j.amount||0).toLocaleString()}
+✅ Advance Paid: ₹${(j.advance||0).toLocaleString()}
+🔴 Balance Due: ₹${balance.toLocaleString()}
+
+For enquiries call: ${ph}
+
+Thank you for trusting us!`;
+  document.getElementById('wa-text').value = msg;
+  openModal('modal-wa');
+}
+
+function sendWhatsApp() {
+  const msg = document.getElementById('wa-text').value;
+  const phone = waPhone.replace(/\D/g,'');
+  const intlPhone = phone.length===10 ? '91'+phone : phone;
+  const url = 'https://wa.me/' + intlPhone + '?text=' + encodeURIComponent(msg);
+  window.open(url, '_blank');
+}
+
+function receiptHTML(j, copyLabel) {
+  const sh = settings;
+  const balance = (j.amount||0)-(j.advance||0);
+  const delivStr = j.delivery ? new Date(j.delivery).toLocaleDateString('en-IN') : 'Will be informed';
+  return `
+  <div class="receipt-half">
+    <div class="receipt-copy-label">${copyLabel}</div>
+    <div class="receipt-header">
+      <div class="receipt-shop-name">${sh.shopname||'TechFix Repair Center'}</div>
+      <div class="receipt-shop-sub">${sh.address||'Thoothukudi, Tamil Nadu'}</div>
+      <div class="receipt-shop-sub">📞 ${sh.phone||''} ${sh.gst?'| GST: '+sh.gst:''}</div>
+    </div>
+    <div class="receipt-section-title">Job Receipt</div>
+    <div class="receipt-row"><span class="lbl">Job ID</span><span class="val" style="color:#1a4fa0;font-weight:700;">${j.id}</span></div>
+    <div class="receipt-row"><span class="lbl">Date</span><span class="val">${j.dateDisplay}</span></div>
+    <div class="receipt-section-title">Client Details</div>
+    <div class="receipt-row"><span class="lbl">Name</span><span class="val">${j.name}</span></div>
+    <div class="receipt-row"><span class="lbl">Mobile</span><span class="val">${j.phone}</span></div>
+    <div class="receipt-section-title">Product Details</div>
+    <div class="receipt-row"><span class="lbl">Product</span><span class="val">${j.product}</span></div>
+    ${j.brand?`<div class="receipt-row"><span class="lbl">Brand/Model</span><span class="val">${j.brand}</span></div>`:''}
+    ${j.serial?`<div class="receipt-row"><span class="lbl">Serial No.</span><span class="val">${j.serial}</span></div>`:''}
+    <div class="receipt-row"><span class="lbl">Condition</span><span class="val">${j.condition}</span></div>
+    ${j.accessories?`<div class="receipt-row"><span class="lbl">Accessories</span><span class="val">${j.accessories}</span></div>`:''}
+    <div class="receipt-section-title">Issue &amp; Repair</div>
+    <div style="font-size:11px;margin:3px 0 6px;line-height:1.5;">${j.problem}</div>
+    <div class="receipt-row"><span class="lbl">Assigned</span><span class="val">${j.assigned==='Outsource'?(j.outsource||'Outsource'):'In-house'}</span></div>
+    <div class="receipt-row"><span class="lbl">Status</span><span class="val" style="font-weight:700;">${j.status}</span></div>
+    <div class="receipt-row"><span class="lbl">Expected Delivery</span><span class="val">${delivStr}</span></div>
+    <div class="receipt-section-title">Payment</div>
+    <div class="receipt-row"><span class="lbl">Est. Amount</span><span class="val">₹${(j.amount||0).toLocaleString()}</span></div>
+    <div class="receipt-row"><span class="lbl">Advance Paid</span><span class="val">₹${(j.advance||0).toLocaleString()}</span></div>
+    <div class="receipt-row" style="border-top:1px solid #ccc;padding-top:4px;margin-top:4px;"><span class="lbl" style="font-weight:600;">Balance Due</span><span class="val" style="font-weight:700;color:#b82020;">₹${balance.toLocaleString()}</span></div>
+    <div class="receipt-footer">${sh.footer||'Thank you! Please keep this receipt safe.'}<br>Customer Signature: _______________</div>
+  </div>`;
+}
+
+function showReceipt(j) { openReceiptModal(j); }
+function openReceipt(id) { const j = jobs.find(j=>j.id===id); if(j) openReceiptModal(j); }
+function openReceiptModal(j) {
+  document.getElementById('receipt-content').innerHTML = receiptHTML(j,'SHOP COPY') + receiptHTML(j,'CLIENT COPY');
+  openModal('modal-receipt');
+}
+
+function openModal(id) { document.getElementById(id).classList.add('open'); }
+function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+function loadSettings() {
+  document.getElementById('s-shopname').value = settings.shopname||'';
+  document.getElementById('s-owner').value = settings.owner||'';
+  document.getElementById('s-address').value = settings.address||'';
+  document.getElementById('s-phone').value = settings.phone||'';
+  document.getElementById('s-gst').value = settings.gst||'';
+  document.getElementById('s-footer').value = settings.footer||'';
+}
+
+function saveSettings() {
+  settings = {
+    shopname: document.getElementById('s-shopname').value.trim(),
+    owner: document.getElementById('s-owner').value.trim(),
+    address: document.getElementById('s-address').value.trim(),
+    phone: document.getElementById('s-phone').value.trim(),
+    gst: document.getElementById('s-gst').value.trim(),
+    footer: document.getElementById('s-footer').value.trim(),
+  };
+  localStorage.setItem('techfix_settings', JSON.stringify(settings));
+  alert('✅ Settings saved!');
+}
+
+window.onclick = function(e) {
+  ['modal-edit','modal-wa','modal-receipt'].forEach(id => {
+    if(e.target === document.getElementById(id)) closeModal(id);
+  });
+};
+
+renderDashboard();
+</script>
+</body>
+</html>
